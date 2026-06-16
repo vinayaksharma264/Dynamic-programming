@@ -266,3 +266,52 @@ class Solution {
         return function(0,0,m-1,n,m,grid,dp);
     }
 }
+
+Problem no. 416 leetcode partition equal subset sum by Vinayak:
+
+class Solution {
+
+    boolean function(int ind, int target, int[] nums, int n, Boolean[][] dp) {
+
+        if (target == 0) {
+            return true;
+        }
+
+        if (ind == 0) {
+            return nums[0] == target;
+        }
+
+        if (dp[ind][target] != null) {
+            return dp[ind][target];
+        }
+
+        boolean notpick = function(ind - 1, target, nums, n, dp);
+
+        boolean pick = false;
+        if (nums[ind] <= target) {
+            pick = function(ind - 1, target - nums[ind], nums, n, dp);
+        }
+
+        return dp[ind][target] = pick || notpick;
+    }
+
+    public boolean canPartition(int[] nums) {
+
+        int n = nums.length;
+
+        int totsum = 0;
+        for (int i = 0; i < n; i++) {
+            totsum += nums[i];
+        }
+
+        if (totsum % 2 != 0) {
+            return false;
+        }
+
+        int target = totsum / 2;
+
+        Boolean[][] dp = new Boolean[n][target + 1];
+
+        return function(n - 1, target, nums, n, dp);
+    }
+}
