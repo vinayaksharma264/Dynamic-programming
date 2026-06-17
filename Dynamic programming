@@ -315,3 +315,38 @@ class Solution {
         return function(n - 1, target, nums, n, dp);
     }
 }
+Leetcode question no.332 coin change:
+
+class Solution {
+    int function(int ind, int amount,int[][] dp,int[] coins){
+        if(ind==0){
+            if(amount%coins[0]==0){
+                return amount/coins[0];
+            }
+            else{
+                return (int)(1e9);
+            }
+        }
+        if(dp[ind][amount]!=-1){
+            return dp[ind][amount];
+        }
+        int nottake=0+function(ind-1,amount,dp,coins);
+        int take=(int)1e9;
+        if(coins[ind]<=amount){
+            take=1+function(ind,amount-coins[ind],dp,coins);
+        }
+        return dp[ind][amount]=Math.min(take,nottake);
+    }
+    public int coinChange(int[] coins, int amount) {
+        int n=coins.length;
+        int[][] dp=new int[n][amount+1];
+        for(int[] row:dp){
+            Arrays.fill(row,-1);
+        }
+        int ans=function(n-1,amount,dp,coins);
+        if(ans>=1e9){
+            return -1;
+        }
+        return ans;
+    }
+}
