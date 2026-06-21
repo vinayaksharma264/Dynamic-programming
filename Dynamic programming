@@ -458,3 +458,106 @@ class Solution {
         return function(n - 1, m - 1, text1, text2, dp);
     }
 }
+
+Leetcode 388 Longest  divisible subset by vinayak :
+
+import java.util.*;
+
+class Solution {
+
+    int function(int ind, int prev, int[] nums,
+                 int[][] dp, int n) {
+
+        if (ind == n) {
+            return 0;
+        }
+
+        if (dp[ind][prev + 1] != -1) {
+            return dp[ind][prev + 1];
+        }
+
+        int len = function(ind + 1, prev, nums, dp, n);
+
+        if (prev == -1 ||
+            nums[ind] % nums[prev] == 0) {
+
+            len = Math.max(
+                    len,
+                    1 + function(ind + 1,
+                                 ind,
+                                 nums,
+                                 dp,
+                                 n)
+                  );
+        }
+
+        return dp[ind][prev + 1] = len;
+    }
+
+    void build(int ind, int prev,
+               int[] nums, int[][] dp,
+               List<Integer> ans, int n) {
+
+        if (ind == n)
+            return;
+
+        int notTake = function(ind + 1,
+                               prev,
+                               nums,
+                               dp,
+                               n);
+
+        if (prev == -1 ||
+            nums[ind] % nums[prev] == 0) {
+
+            int take = 1 + function(
+                            ind + 1,
+                            ind,
+                            nums,
+                            dp,
+                            n
+                        );
+
+            if (take >= notTake) {
+                ans.add(nums[ind]);
+
+                build(ind + 1,
+                      ind,
+                      nums,
+                      dp,
+                      ans,
+                      n);
+
+                return;
+            }
+        }
+
+        build(ind + 1,
+              prev,
+              nums,
+              dp,
+              ans,
+              n);
+    }
+
+    public List<Integer> largestDivisibleSubset(int[] nums) {
+
+        int n = nums.length;
+
+        Arrays.sort(nums);
+
+        int[][] dp = new int[n][n + 1];
+
+        for (int[] row : dp) {
+            Arrays.fill(row, -1);
+        }
+
+        function(0, -1, nums, dp, n);
+
+        List<Integer> ans = new ArrayList<>();
+
+        build(0, -1, nums, dp, ans, n);
+
+        return ans;
+    }
+}
