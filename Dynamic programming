@@ -561,3 +561,51 @@ class Solution {
         return ans;
     }
 }
+
+Leetcode 132 palindrome ii by vinayak sharma 
+
+class Solution {
+    public boolean isPalindrome(int i,int j,String s) {
+
+        int left = i;
+        int right =j;
+
+        while(left < right){
+
+            if(s.charAt(left) != s.charAt(right)){
+                return false;
+            }
+
+            left++;
+            right--;
+        }
+
+        return true;
+    }
+    
+    int function(int i,String s,int[] dp){
+        int n=s.length();
+        if(i==n){
+            return 0;
+        }
+        if(dp[i]!=-1){
+            return dp[i];
+        }
+        String temp=" ";
+        int mincost=(int)(1e9);
+        for(int j=i;j<s.length();j++){
+            temp += s.charAt(j);
+            if(isPalindrome(i,j,s)){
+                int cost=1+function(j+1,s,dp);
+                mincost=Math.min(mincost,cost);
+            }
+        }
+        return dp[i]=mincost;
+    }
+    public int minCut(String s) {
+        int n=s.length();
+        int[] dp=new int[n];
+        Arrays.fill(dp,-1);
+        return function(0,s,dp)-1;
+    }
+}
